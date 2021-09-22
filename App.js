@@ -23,18 +23,60 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 
 const Stack = createNativeStackNavigator();
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Landing">
-        <Stack.Screen
-          name="landing"
-          component={Landing}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="register" component={Register} />
-        <Stack.Screen name="login" component={Login} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+import { Component } from "react";
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false,
+    };
+  }
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        this.setState({
+          loggedIn: false,
+          loaded: true,
+        });
+      } else {
+        this.setState({
+          loggedIn: true,
+          loaded: true,
+        });
+      }
+    });
+  }
+
+  render() {
+    const { loggedIn, loaded } = this.state;
+    if (!loaded) {
+      return (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Text>Loading</Text>
+        </View>
+      );
+    }
+
+    if (!loggedIn) {
+      return (
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Landing">
+            <Stack.Screen
+              name="landing"
+              component={Landing}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="register" component={Register} />
+            <Stack.Screen name="login" component={Login} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    }
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignSelf: "center" }}>
+        <Text>Logged in</Text>
+      </View>
+    );
+  }
 }
