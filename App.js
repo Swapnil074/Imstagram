@@ -12,7 +12,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Landing from "./components/auth/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
-import Main from "./components/Main";
+import Main from "./components/main/Main";
+import Add from "./components/main/main/Add";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -81,7 +82,20 @@ export default class App extends Component {
     }
     return (
       <Provider store={store}>
-        <Main />
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="main">
+            <Stack.Screen
+              name="main"
+              component={Main}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="add"
+              component={Add}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
       </Provider>
     );
   }
