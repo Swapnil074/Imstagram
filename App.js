@@ -2,6 +2,19 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import * as firebase from "firebase";
+import { Component } from "react";
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import rootReducer from "./components/redux/reducers";
+import thunk from "redux-thunk";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Landing from "./components/auth/Landing";
+import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
+import Main from "./components/Main";
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const firebaseConfig = {
   apiKey: "AIzaSyB3O7all7GmRWG4xw0aLjF2VVwCy3O96Ys",
@@ -16,14 +29,7 @@ if (firebase.apps.length === 0) {
   firebase.initializeApp(firebaseConfig);
 }
 
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Landing from "./components/auth/Landing";
-import Register from "./components/auth/Register";
-import Login from "./components/auth/Login";
-
 const Stack = createNativeStackNavigator();
-import { Component } from "react";
 
 export default class App extends Component {
   constructor(props) {
@@ -74,9 +80,9 @@ export default class App extends Component {
       );
     }
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignSelf: "center" }}>
-        <Text>Logged in</Text>
-      </View>
+      <Provider store={store}>
+        <Main />
+      </Provider>
     );
   }
 }
