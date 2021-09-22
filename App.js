@@ -14,6 +14,8 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Main from "./components/main/Main";
 import Add from "./components/main/main/Add";
+import Save from "./components/main/main/Save";
+import Comment from "./components/main/main/Comment";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -93,6 +95,16 @@ export default class App extends Component {
               name="add"
               component={Add}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="save"
+              component={Save}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Comment"
+              component={Comment}
+              navigation={this.props.navigation}
             />
           </Stack.Navigator>
         </NavigationContainer>
